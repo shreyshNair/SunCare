@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suncare | Your Personalized UV Advisor</title>
+    <!-- Google Fonts: Inter and Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="background-decor blob-1"></div>
+    <div class="background-decor blob-2"></div>
+    <div class="background-decor blob-3"></div>
+
+    <main class="container">
+        <header>
+            <div class="logo">
+                <i class="fas fa-sun-plant-wilt"></i>
+                <h1>Suncare.</h1>
+            </div>
+            <p>Your real-time UV radiation shield advisor.</p>
+        </header>
+
+        <% if (error) { %>
+            <div class="glass-card error-card animate-fade-in">
+                <i class="fas fa-triangle-exclamation"></i>
+                <p><%= error %></p>
+                <% if (!uvData) { %>
+                    <div class="setup-hint">
+                        <small>To get started, add your <strong>OPENUV_API_KEY</strong> from <a href="https://www.openuv.io/" target="_blank">openuv.io</a> to the <code>.env</code> file.</small>
+                    </div>
+                <% } %>
+            </div>
+        <% } %>
+
+        <% if (uvData) { %>
+            <div class="glass-card main-uv-card animate-slide-up">
+                <div class="uv-header">
+                    <span class="location-badge">
+                        <i class="fas fa-location-dot"></i>
+                        <%= uvData.location.lat.toFixed(2) %>, <%= uvData.location.lng.toFixed(2) %>
+                    </span>
+                    <span class="timestamp">
+                        <i class="fas fa-clock"></i>
+                        <%= new Date(uvData.uv_time).toLocaleString() %>
+                    </span>
+                </div>
+
+                <div class="uv-radial-display <%= uvData.colorClass %>">
+                    <div class="uv-value-container">
+                        <span class="uv-label">Live UV Index</span>
+                        <h2 class="uv-index"><%= uvData.uv.toFixed(1) %></h2>
+                    </div>
+                    <div class="uv-ring"></div>
+                </div>
+
+                <div class="recommendation-section">
+                    <h3 class="recommendation-text"><%= uvData.recommendation %></h3>
+                    <p class="advice-text"><%= uvData.advice %></p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <i class="fas fa-sun"></i>
+                        <span class="stat-label">Max UV Today</span>
+                        <span class="stat-value"><%= uvData.uv_max.toFixed(1) %></span>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-temperature-empty"></i>
+                        <span class="stat-label">UV Max Time</span>
+                        <span class="stat-value"><%= new Date(uvData.uv_max_time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %></span>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-cloud"></i>
+                        <span class="stat-label">Current Altitude</span>
+                        <span class="stat-value"><%= uvData.st ? uvData.st : 'Sea Level' %></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="safe-times-card animate-slide-up-delayed">
+                <h3><i class="fas fa-shield-halved"></i> Daily Protection Guide</h3>
+                <div class="safe-exposure">
+                    <div class="exposure-time">
+                        <span class="label">Safe Exposure (Skin Type 1-2):</span>
+                        <span class="value"><%= uvData.safe_exposure_time.st1 ? uvData.safe_exposure_time.st1 + ' mins' : 'No limit' %></span>
+                    </div>
+                    <div class="exposure-time">
+                        <span class="label">Safe Exposure (Skin Type 3-4):</span>
+                        <span class="value"><%= uvData.safe_exposure_time.st3 ? uvData.safe_exposure_time.st3 + ' mins' : 'No limit' %></span>
+                    </div>
+                </div>
+            </div>
+        <% } %>
+
+        <footer class="animate-fade-in-delayed">
+            <p>&copy; 2026 Suncare. Powered by OpenUV Protocol.</p>
+        </footer>
+    </main>
+</body>
+</html>
