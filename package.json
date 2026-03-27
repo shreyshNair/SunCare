@@ -1,7 +1,7 @@
 {
-  "name": "exp4b",
+  "name": "suncare",
   "version": "1.0.0",
-  "description": "",
+  "description": "A premium web-based UV Index and Sunscreen Advisor using Node.js, Express, and Axios with OpenUV API integration.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
